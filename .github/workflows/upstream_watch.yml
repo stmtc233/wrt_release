@@ -8,20 +8,10 @@ on:
     branches:
       - main
     paths:
-      - "wrt_core/deconfig/MEDIATEK-WIFI-YES.config"
-      - "wrt_core/deconfig/MEDIATEK-WIFI-NO.config"
-      - "wrt_core/deconfig/S20L-WIFI-YES.config"
+      - "wrt_core/deconfig/S20P.config"
       - "wrt_core/deconfig/S20P-WIFI-YES.config"
-      - "wrt_core/deconfig/S20-WIFI-NO.config"
-      - "wrt_core/deconfig/jdcloud_ax6000_immwrt.config"
-      - "wrt_core/deconfig/jdcloud_ax6000_immwrt_honk.config"
-      - "wrt_core/compilecfg/MEDIATEK-WIFI-YES.ini"
-      - "wrt_core/compilecfg/MEDIATEK-WIFI-NO.ini"
-      - "wrt_core/compilecfg/S20L-WIFI-YES.ini"
+      - "wrt_core/compilecfg/S20P.ini"
       - "wrt_core/compilecfg/S20P-WIFI-YES.ini"
-      - "wrt_core/compilecfg/S20-WIFI-NO.ini"
-      - "wrt_core/compilecfg/jdcloud_ax6000_immwrt.ini"
-      - "wrt_core/compilecfg/jdcloud_ax6000_immwrt_honk.ini"
       - "wrt_core/deconfig/compile_base.config"
       - "wrt_core/deconfig/fragments/**"
       - "wrt_core/modules/**"
@@ -41,13 +31,8 @@ on:
         default: all
         options:
           - all
-          - MEDIATEK-WIFI-YES
-          - MEDIATEK-WIFI-NO
-          - S20L-WIFI-YES
+          - S20P
           - S20P-WIFI-YES
-          - S20-WIFI-NO
-          - jdcloud_ax6000_immwrt
-          - jdcloud_ax6000_immwrt_honk
       force_build:
         description: Build even when the fingerprint was already released
         required: true

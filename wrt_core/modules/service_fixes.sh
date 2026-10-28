@@ -190,6 +190,7 @@ fix_netfilter_kmod_clash() {
 
 
 install_pbr_cmcc() {
+    [ -f "$BASE_PATH/patches/pbr.user.cmcc" ] || return 0
     local pbr_pkg_dir="$BUILD_DIR/package/feeds/packages/pbr"
     local pbr_dir="$pbr_pkg_dir/files/usr/share/pbr"
     local pbr_conf="$pbr_pkg_dir/files/etc/config/pbr"

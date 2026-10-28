@@ -572,7 +572,7 @@ install_custom_feed() {
         open-app-filter luci-app-oaf lucky luci-app-lucky luci-app-easytier
         luci-app-emmc-health luci-app-wolultra luci-app-mini-diskmanager
         axonhub luci-app-axonhub gecoosac luci-app-gecoosac sing-box
-        luci-app-tingreader luci-app-velo5x0-fan
+        luci-app-tingreader luci-compat-keep
     )
     local custom_feed_sources=()
     local missing_feed_dirs=()
@@ -635,6 +635,11 @@ install_custom_feed() {
         rm -rf "$custom_feed_dir"
     fi
     mkdir -p "$custom_feed_dir"
+    if [ -d "$BASE_PATH/package/luci-compat-keep" ]; then
+        cp -r "$BASE_PATH/package/luci-compat-keep" "$custom_feed_dir/"
+    elif [ -d "$BASE_PATH/../package/luci-compat-keep" ]; then
+        cp -r "$BASE_PATH/../package/luci-compat-keep" "$custom_feed_dir/"
+    fi
 
     # 先导入 VIKINGYFY 整仓；下面的精选来源会覆盖同名包，避免改变现有稳定依赖链。
     if ! sync_all_top_level_packages_to_feed_dir \
@@ -730,12 +735,6 @@ install_custom_feed() {
         return 1
     fi
 
-    if ! sync_repo_root_package_to_feed_dir \
-        "https://github.com/dqsq2e2/luci-app-velo5x0-fan.git" "main" \
-        "$custom_feed_dir" "dqsq2e2/luci-app-velo5x0-fan" "luci-app-velo5x0-fan"; then
-        rm -rf "$custom_feed_dir"
-        return 1
-    fi
 
     register_local_feed_source "$custom_feed_dir" "$feeds_path"
 

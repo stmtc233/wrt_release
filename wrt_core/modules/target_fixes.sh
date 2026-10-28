@@ -412,6 +412,7 @@ update_nss_pbuf_performance() {
 
 
 update_nss_diag() {
+    [ -f "$BASE_PATH/patches/nss_diag.sh" ] || return 0
     local file="$BUILD_DIR/package/kernel/mac80211/files/nss_diag.sh"
     if [ -d "$(dirname "$file")" ] && [ -f "$file" ]; then
         \rm -f "$file"

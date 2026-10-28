@@ -11,13 +11,7 @@ LEGACY_FINGERPRINT_COMMITS=(
 )
 
 MODELS=(
-    MEDIATEK-WIFI-YES
-    MEDIATEK-WIFI-NO
-    S20L-WIFI-YES
-    S20P-WIFI-YES
-    S20-WIFI-NO
-    jdcloud_ax6000_immwrt
-    jdcloud_ax6000_immwrt_honk
+    S20P
 )
 
 read_ini_value() {
