@@ -149,16 +149,25 @@ jobs:
           fi
           ./build.sh ${{ inputs.model }}
 
-      - name: Delete Old Cache
+      - name: Verify Netlink Diag and Collect Kmods
         run: |
-          # 获取缓存列表并删除
-          gh cache list --key ${{ matrix.os }}-${{ inputs.model }}- --json key --jq '.[] | .key' | while read -r key; do
-            gh cache delete "$key"
-          done
-          # 输出缓存状态
-          echo "========cache status========"
-          echo "ccache: $(du -sh ./action_build/.ccache | cut -f 1)"
-          echo "staging: $(du -sh ./action_build/staging_dir | cut -f 1)"
+          set -euo pipefail
+          expected_source=daa7695e855d98abbd1b2df42b1dc03812b267b3
+          test "$(git -C ./action_build rev-parse HEAD)" = "$expected_source"
+          grep -qxF 'CONFIG_PACKAGE_kmod-netlink-diag=y' ./action_build/.config
+          kernel_config=$(find ./action_build/build_dir -path '*/linux-mediatek_filogic/linux-*/.config' -type f -print -quit)
+          test -n "$kernel_config"
+          grep -qxF 'CONFIG_SOCK_DIAG=y' "$kernel_config"
+          grep -qxF 'CONFIG_NETLINK_DIAG=m' "$kernel_config"
+          grep -qE '^kmod-netlink-diag - ' ./firmware/*.manifest
+          find ./action_build/bin -type f -name 'kmod-netlink-diag-*.apk' -print -quit | grep -q .
+          KMOD_LIST=$(mktemp)
+          trap 'rm -f "$KMOD_LIST"' EXIT
+          (cd ./action_build/bin && find . -type f \( -name 'kmod*.apk' -o -name 'kmod*.ipk' \) -print | sort > "$KMOD_LIST")
+          test -s "$KMOD_LIST"
+          tar -C ./action_build/bin -czf "./firmware/kmods_${{ inputs.model }}_netlink-diag_${BUILD_DATE}.tar.gz" -T "$KMOD_LIST"
+          printf 'source=%s\nmodel=%s\nCONFIG_SOCK_DIAG=y\nCONFIG_NETLINK_DIAG=m\nCONFIG_PACKAGE_kmod-netlink-diag=y\n' "$expected_source" '${{ inputs.model }}' > ./firmware/build-verification.txt
+          (cd ./firmware && sha256sum *sysupgrade.bin > SHA256SUMS)
 
       - name: Machine Information (Post-build)
         run: |
@@ -190,8 +199,8 @@ jobs:
         uses: actions/upload-artifact@v7.0.1
         with:
           name: ${{ env.BUILD_DATE }}_${{ inputs.model }}
-          path: ./firmware/*.*
-          retention-days: 3
+          path: ./firmware/*
+          retention-days: 30
           if-no-files-found: error
 
       - name: Cleanup Target Build

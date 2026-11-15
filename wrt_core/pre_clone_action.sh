@@ -43,6 +43,11 @@ BUILD_DIR="$BASE_PATH/../action_build"
 echo $REPO_URL $REPO_BRANCH
 git_retry clone --depth 1 -b "$REPO_BRANCH" "$REPO_URL" "$BUILD_DIR"
 
+# Make the pinned firmware source available in the shallow build checkout.
+if [[ $COMMIT_HASH != "none" ]]; then
+    git_retry -C "$BUILD_DIR" fetch --depth 1 origin "$COMMIT_HASH" || exit 1
+fi
+
 # Cache identity includes the actual upstream commit so incompatible host/toolchain
 # caches are not treated as an exact hit after the source branch advances.
 SOURCE_HASH=$(git -C "$BUILD_DIR" rev-parse HEAD)
