@@ -107,6 +107,16 @@ verify_expected_kernel_version() {
 }
 
 
+verify_netlink_diag_config() {
+    local config_path="$1"
+
+    if ! grep -qxF 'CONFIG_PACKAGE_kmod-netlink-diag=y' "$config_path"; then
+        echo "Error: make defconfig dropped required CONFIG_PACKAGE_kmod-netlink-diag=y." >&2
+        return 1
+    fi
+}
+
+
 verify_daed_config() {
     local config_path="$1"
     local enabled="${2:-0}"
