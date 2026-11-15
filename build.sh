@@ -614,6 +614,7 @@ verify_expected_kernel_version "$EXPECTED_KERNEL" "target/linux/mediatek/Makefil
 make defconfig
 verify_theme_config
 verify_apk_config
+verify_netlink_diag_config .config
 verify_daed_config .config "$DAED_PACKAGES_ENABLED"
 verify_honk_config .config "$HONK_PACKAGES_ENABLED"
 

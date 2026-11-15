@@ -17,7 +17,7 @@
 - **全量核心组件与 Kmod 保留**：
   - **USB 移动共享网络**：`kmod-usb-net-cdc-ether`、`kmod-usb-net-rndis`、`kmod-usb-net-ipheth`（手机热点与随身 WiFi）。
   - **磁盘与文件系统**：`kmod-mtd-rw`（解锁 MTD 读写）、EXT4、FAT32、NTFS3、Btrfs、exFAT。
-  - **网络与加密驱动**：`kmod-tun`、`kmod-wireguard`、`kmod-tcp-bbr`、`kmod-nft-tproxy`、全量 Crypto 与 iptables/nftables 核心模块。
+  - **网络与加密驱动**：`kmod-tun`、`kmod-netlink-diag`、`kmod-wireguard`、`kmod-tcp-bbr`、`kmod-nft-tproxy`、全量 Crypto 与 iptables/nftables 核心模块。
   - **Release 全量 Kmod 打包**：编译发布时自动将所有 kmod 归档为 `kmods_S20P_*.tar.gz` 上传至 Release，彻底避免后续安装驱动出现 vermagic 内核版本哈希不匹配的问题。
 - **依赖保护与扩展性**：
   - 集成 `package/luci-compat-keep` 依赖守护包，确保 `luci-compat` 不被清理。
