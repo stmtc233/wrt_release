@@ -17,3 +17,16 @@ if uci show dropbear | grep -q "DirectInterface"; then
     uci commit dropbear
     /etc/init.d/dropbear restart
 fi
+
+# 优化 dnsmasq 缓存大小与并发查询数
+if [ -f /etc/config/dhcp ]; then
+    uci -q get dhcp.@dnsmasq[0] >/dev/null && {
+        uci set dhcp.@dnsmasq[0].cachesize='10000'
+        uci set dhcp.@dnsmasq[0].dns_forward_max='10000'
+        uci set dhcp.@dnsmasq[0].min_cache_ttl='3600'
+        uci set dhcp.@dnsmasq[0].use_stale_cache='3600'
+        uci set dhcp.@dnsmasq[0].ednspacket_max='1232'
+        uci commit dhcp
+    }
+fi
+
